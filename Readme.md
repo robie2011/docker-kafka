@@ -92,7 +92,7 @@ See [kafka.apache.org, Documentation - 3.2 Topic-Level Configs](https://kafka.ap
 
 Example: Set topic `retention.ms = 60000`. Messages will be delete after 1 min.
 
-    bin/kafka-configs.sh --zookeeper localhost:2181 --alter --entity-type topics --entity-name CoinbaseTicker --add-config retention.ms=60000
+    bin/kafka-configs.sh --zookeeper localhost:2181 --alter --entity-type topics --entity-name my-topic --add-config retention.ms=60000
 
 Example: Delete configuration
 
