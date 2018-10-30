@@ -1,7 +1,11 @@
-# Examples
-Starting
+# Starting
+docker run
 
     docker run -d -p 9092:9092 -p 2181:2181 robie2011/kafka
+
+custom configuration: To override defaults, you can e.g. map `/config` folder
+
+    docker run -d -p 9092:9092 -p 2181:2181 -v$(pwd):/opt/kafka/config robie2011/kafka
 
 
 
@@ -63,3 +67,39 @@ consumer.on('message', function (message) {
     console.log(message);
 });
 ```
+
+# Administration
+
+## delete topic
+    bin/kafka-topics.sh --delete --topic Hello --zookeeper localhost:2181
+
+## get topic size in bytes
+Shellscript output is JSON-String. For extracting bytes npm-module `node-jq` is used. See https://www.npmjs.com/package/node-jq
+
+    bin/kafka-log-dirs.sh --bootstrap-server 127.0.0.1:9092 --topic-list 'CoinbaseTicker' --describe | tail -n 1 | jq '.brokers[]?.logDirs[].partitions[].size'
+
+
+## create topic with custom configuration
+    
+    bin/kafka-topics.sh --zookeeper localhost:2181 --create --topic my-topic --partitions 1 --replication-factor 1 --config max.message.bytes=64000 --config flush.messages=1
+
+## topic configuration
+See [kafka.apache.org, Documentation - 3.2 Topic-Level Configs](https://kafka.apache.org/documentation/#topicconfigs)
+
+
+    bin/kafka-configs.sh --zookeeper zoo1.example.com:2181/kafka-cluster --alter --entity-type topics --entity-name <topicame> --add-config <key>=<value>[,<key>=<value>...]
+
+
+Example: Set topic `retention.ms = 60000`. Messages will be delete after 1 min.
+
+    bin/kafka-configs.sh --zookeeper localhost:2181 --alter --entity-type topics --entity-name CoinbaseTicker --add-config retention.ms=60000
+
+Example: Delete configuration
+
+    bin/kafka-configs.sh --zookeeper localhost:2181  --entity-type topics --entity-name my-topic --alter --delete-config max.message.bytes
+
+Example: Check overrides
+
+    bin/kafka-configs.sh --zookeeper localhost:2181 --entity-type topics --entity-name my-topic --describe
+
+
