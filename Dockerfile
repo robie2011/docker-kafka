@@ -9,4 +9,4 @@ ADD start.sh /start.sh
 ADD config /opt/kafka/config
 
 WORKDIR /
-CMD ["bash", "/start.sh"]
+CMD ["/start.sh"]
