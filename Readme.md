@@ -7,6 +7,13 @@ custom configuration: To override defaults, you can e.g. map `/config` folder
 
     docker run -d -p 9092:9092 -p 2181:2181 -v$(pwd):/opt/kafka/config robie2011/kafka
 
+# Configuration
+  * If you are accessing this container from remote host (other than localhost) than you have to set the the public hostname/ip address for `advertised.listeners` in `server.properties`
+  * If you need to persists data and configuration, than you have to configure `log.dir` in `server.properties` and `dataDir` in `zookeeper.properties`
+  * How to configure? (some ideas)
+    * You can map containers config folder to host maschine
+    * You can attach container to cmd shell, edit config files & restart
+    * For persisting purpose you can also map containers data-folder to host maschine
 
 
 # Testing
