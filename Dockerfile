@@ -5,8 +5,7 @@ RUN wget -qO- http://mirror.switch.ch/mirror/apache/dist/kafka/2.0.0/kafka_2.12-
     mv /opt/kafka/config /opt/kafka/config-original-backup && \
     mkdir /tmp/kafka-logs/ && echo "test">/tmp/kafka-logs/empty.log
     
-ADD start.sh /start.sh
-ADD config /opt/kafka/config
 
-WORKDIR /
-CMD ["/start.sh"]
+ADD config /opt/kafka/config
+WORKDIR /opt/kafka
+CMD bin/zookeeper-server-start.sh -daemon config/zookeeper.properties; bin/kafka-server-start.sh config/server.properties
