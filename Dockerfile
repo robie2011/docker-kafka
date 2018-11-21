@@ -10,4 +10,4 @@ ADD config /opt/kafka/config
 WORKDIR /opt/kafka
 
 # issue with zookeeper: https://stackoverflow.com/questions/39759071/error-while-starting-kafka-broker
-CMD rm -rf /tmp/zookeeper/*; bin/zookeeper-server-start.sh -daemon config/zookeeper.properties; bin/kafka-server-start.sh config/server.properties
+CMD bin/zookeeper-server-start.sh -daemon config/zookeeper.properties && (bin/kafka-server-start.sh config/server.properties || echo "kafka start failed. restarting ... " && sleep 3 && bin/kafka-server-start.sh config/server.properties)
